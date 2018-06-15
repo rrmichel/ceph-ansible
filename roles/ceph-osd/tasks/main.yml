@@ -17,9 +17,6 @@
   # Hard code this so we will skip the entire file instead of individual tasks (Default isn't Consistent)
   static: False
 
-- name: include ceph_disk_cli_options_facts.yml
-  include: ceph_disk_cli_options_facts.yml
-
 - name: include build_devices.yml
   include: build_devices.yml
 
@@ -35,39 +32,15 @@
   when:
     - osd_scenario != 'lvm'
 
-- name: include scenarios/collocated.yml
-  include: scenarios/collocated.yml
-  when:
-    - osd_scenario == 'collocated'
-  # Hard code this so we will skip the entire file instead of individual tasks (Default isn't Consistent)
-  static: False
-
-- name: include scenarios/non-collocated.yml
-  include: scenarios/non-collocated.yml
-  when:
-    - not osd_auto_discovery
-    - osd_scenario == 'non-collocated'
-  # Hard code this so we will skip the entire file instead of individual tasks (Default isn't Consistent)
-  static: False
-
-- name: include scenarios/lvm.yml
-  include: scenarios/lvm.yml
+- name: include prepare_osds.yml
+  include: prepare_osds.yml
   when:
     - osd_scenario == 'lvm'
-    - not containerized_deployment
   # Hard code this so we will skip the entire file instead of individual tasks (Default isn't Consistent)
   static: False
 
 - name: include activate_osds.yml
   include: activate_osds.yml
-  when:
-    - not containerized_deployment
-    - osd_scenario != 'lvm'
-  # Hard code this so we will skip the entire file instead of individual tasks (Default isn't Consistent)
-  static: False
-
-- name: include start_osds.yml
-  include: start_osds.yml
   when:
     - not containerized_deployment
     - osd_scenario != 'lvm'
